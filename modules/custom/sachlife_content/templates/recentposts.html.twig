@@ -1,0 +1,25 @@
+<div class="col-md-12 col-sm-6">
+  <div class="sidebar-widget sidebar-post-list">
+    <h3 class="sidebar-heading">Recent Posts</h3>
+    <hr class="hr-short">
+    <ul class="list-unstyled">
+      {% if content|length > 0 %}
+        {% for key in content %}
+          <li>
+            <div class="post-data">
+              <h5 class="post-title">
+                <a href="/article/{{ key.nid }}/{{ key.title|replace({' ':'-'}) }}">
+                  {{ key.title }}
+                </a>
+              </h5>
+              <span class="author">By: <a href="">
+              {{ key.firstName }} {{ key.lastName }}</a>
+          </span>
+              <span class="date">{{ key.created|date('d M Y') }}</span>
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+name: Sachlife Portfolio
+description: Sachlife Portfolio is custom module for Portfolio Images of Sachlife.com
+package: Photography
+type: module
+core: '8.x'
+version: 8.0

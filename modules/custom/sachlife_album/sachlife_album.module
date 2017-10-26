@@ -1,0 +1,14 @@
+<?php
+function sachlife_album_theme($existing, $type, $theme, $path) {
+  return [
+    'albumStyleOne' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'albumPage' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'headerimage' => [
+      'variables' => ['content' => ''],
+    ],
+  ];
+}

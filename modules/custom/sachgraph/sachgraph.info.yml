@@ -1,0 +1,9 @@
+name: Sachgraph Sidebar
+description: Sachgraph - Sidebar section for extra links and information
+package: Photography
+type: module
+core: '8.x'
+version: 8.0
+dependencies:
+  - drupal:block
+  - drupal:node

@@ -1,0 +1,17 @@
+<section id="intro-section" class="full-page bg-image-scroll-vertical"
+         style="background-image: url({{ file_url(content.backgroundImage) }}); background-position: 50% 50%;">
+  <div class="cover bg-transparent-6-dark"></div>
+    <div class="intro-caption bg-transparent-8-dark text-gray-3">
+      <h1 class="intro-title">{{ content.title }}</h1>
+      <p class="intro-text hide-from-xs">{{ content.description|raw }}</p>
+      <div class="intro-button-wrap">
+        <a href="{{ content.url}}"
+          class="btn btn-primary btn-rounded-5x margin-top-10 hide-from-xs">
+            {{ content.urlText }}
+        </a>
+      </div>
+    </div>
+    <div class="made-with-love hide-from-sm">
+      <p>Made With <span class="text-red"><i class="fa fa-heart-o"></i></span></p>
+  </div>
+</section>

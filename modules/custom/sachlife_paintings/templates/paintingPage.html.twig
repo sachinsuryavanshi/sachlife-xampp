@@ -1,0 +1,108 @@
+<section id="content-section" class="portfolio-single portfolio-single-2">
+  {% if content|length > 0 %}
+    <div class="content-wrap">
+      <div class="container full-width">
+        <div class="row">
+          <div class="col-left col-md-6 col-lg-8 f-height">
+            <div id="gallery" class="lightgallery f-height hover-center hover-boxed">
+              <div class="owl-carousel dots-rounded dots-outside nav-rounded" data-items="1" data-margin="6"
+                   data-nav="true" data-animate-in="fadeIn" data-animate-out="fadeOut">
+                <div class="album-single-item">
+                  <div class="full-cover bg-image"
+                       style="background-image: url({{ file_url(content.painting|image_style('portfolio_grid_thumbnail')) }}); background-position: 50% 50%;"></div>
+                  <div class="asi-cover">
+                    <a class="asi-link lg-trigger" href="{{ file_url(content.painting) }}"
+                       data-exthumbnail="{{ file_url(content.painting|image_style('photographs_thumbnail')) }}"
+                       data-sub-html="<h4>{{ content.paintingTitle }}</h4><p>{{ content.paintingTitle }}</p>">
+                      <div class="asi-info">
+                        <h2 class="asi-title">{{ content.paintingTitle }}</h2>
+                        <h5 class="asi-sub-title">#{{ content.paintingAlt }}</h5>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-right col-md-6 col-lg-4 f-height">
+            <div class="portfolio-info">
+              <div class="portfolio-info-inner">
+                <h1 class="portfolio-title">About Project:</h1>
+                <div class="author">
+                  <a href="#" class="author-avatar bg-image"
+                     style="background-image: url({{ file_url(content.authorAvatar) }}); background-position: 50% 50%;"></a>
+                  <a href="" class="author-info">- Author: {{ content.author }}</a>
+                </div>
+                <div class="album-description margin-top-20">
+                  <div class="al-desc-inner">
+                    <p>{{ content.description|slice(0,150)|raw }}</p>
+                    <div class="al-desc-toggle">
+                      <p>{{ content.description|slice(151)|raw }}</p>
+                    </div>
+                  </div>
+                  <div class="al-desc-toggle-trigger">
+                    <span class="al-desc-more"><i class="fa fa-chevron-down"></i> More</span>
+                    <span class="al-desc-less"><i class="fa fa-chevron-up"></i> Less</span>
+                  </div>
+                </div>
+                <div class="portfolio-atr margin-top-30">
+                  <ul class="list-unstyled">
+                    {% if content.category|length > 0 %}
+                      <li>
+                        <h4 class="head">Category:</h4>
+                        {% for keyCat,valCat in content.category %}
+                          <span class="info"><a href="#">{{ valCat }}</a></span>
+                        {% endfor %}
+                      </li>
+                    {% endif %}
+
+                    {% if content.paintingTags|length > 0 %}
+                      <li>
+                        <h4 class="head">Tags:</h4>
+                        {% for keyTag,valTag in content.paintingTags %}
+                          <span class="info"><a href="#">{{ valTag }}</a></span>
+                        {% endfor %}
+                      </li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+              <div class="portfolio-info-bottom">
+                <ul class="album-attributes margin-top-40">
+                  <li class="pull-left">
+                    <a class="back-to-list" href="/painting">
+                      <span class="bta-icon"><i class="fa fa-th-list"></i></span>
+                      <span class="bta-text">Back to list</span>
+                    </a>
+                  </li>
+                  {% if content.nodeNextNavigation|length > 0 %}
+                    {% for keyNext in content.nodeNextNavigation %}
+                      <li class="portfolio-nav pull-right">
+                        <a href="/painting/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
+                           class="pn-link portf-next" title="Next work">
+                          <span class="pn-link-text hide-from-sm">Next</span>
+                          <span class="pn-link-icon"><i class="fa fa-chevron-right"></i></span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endif %}
+                  {% if content.nodePrevNavigation|length > 0 %}
+                    {% for keyPrev in content.nodePrevNavigation %}
+                      <li class="portfolio-nav pull-right">
+                        <a href="/painting/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
+                           class="pn-link portf-prev margin-right-15" title="Previous work">
+                          <span class="pn-link-icon"><i class="fa fa-chevron-left"></i></span>
+                          <span class="pn-link-text hide-from-sm">Prev</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>

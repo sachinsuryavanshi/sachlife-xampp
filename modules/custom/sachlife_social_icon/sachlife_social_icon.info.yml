@@ -1,0 +1,9 @@
+name: Sachlife Social Icon
+description: Social Icon block is for Social Media sites
+package: Photography
+type: module
+core: '8.x'
+version: 8.0
+dependencies:
+  - drupal:block
+  - drupal:node

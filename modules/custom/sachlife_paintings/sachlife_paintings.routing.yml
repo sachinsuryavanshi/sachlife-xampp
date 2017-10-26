@@ -1,0 +1,14 @@
+sachlife_paintings.paintingslist:
+  path: 'painting'
+  defaults:
+    _controller: '\Drupal\sachlife_paintings\Controller\SachlifePaintingPageController::paintingList'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+sachlife_paintings.painting:
+  path: 'painting/{nid}/{portfolio}'
+  defaults:
+    _controller: '\Drupal\sachlife_paintings\Controller\SachlifePaintingPageController::painting'
+    _title: ''
+  requirements:
+    _access: 'TRUE'

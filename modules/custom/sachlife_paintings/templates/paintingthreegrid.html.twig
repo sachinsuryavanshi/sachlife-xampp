@@ -1,0 +1,57 @@
+<section id="content-section" class="portfolio-list-masonry">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="content-wrap">
+          <div class="isotope gutter-3 col-3">
+            <div class="gallery-top-content">
+              <div class="row margin-bottom-40">
+                <div class="col-md-8">
+                  <div class="isotope-filter">
+                    <div class="navbar-header visible-xs">
+                      <button type="button" class="navbar-toggle collapsed filter-toggle-btn" data-toggle="collapse"
+                              data-target="#isotope-filter-collapse">
+                        <span class="text-center">Filter <i class="fa fa-bars"></i></span>
+                      </button>
+                    </div>
+                    <h2 class="filter-heading">Filters</h2>
+                    <div class="isotope-filter-links collapse navbar-collapse no-padding" id="isotope-filter-collapse">
+                      {% if categoryList|length > 0 %}
+                        <a class="active" href="#" data-filter="*">all</a>
+                        {% for keyList in categoryList %}
+                          <a href="#" data-filter=".{{ keyList|replace(' ', '-')|lower }}">{{ keyList }}</a>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="isotope-items-wrap ali-style-2 caption-outside">
+              <div class="grid-sizer"></div>
+              {% if content|length > 0 %}
+                {% for key,value in content %}
+                  <div class="isotope-item {{ value.category|lower }}">
+                    <div class="album-list-item">
+                      <a class="ali-link" href="/painting/{{ key }}/{{ value.title|replace({' ':'-'}) }}">
+                        <div class="ali-img-wrap">
+                          <img class="ali-img"
+                               src="{{ file_url(value.coverPhoto|image_style('portfolio_grid_thumbnail')) }}"
+                               alt="image">
+                        </div>
+                        <div class="ali-caption">
+                          <h2 class="ali-title">{{ value.title }}</h2>
+                          <div class="ali-meta">{{ value.imageCount }} photos</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

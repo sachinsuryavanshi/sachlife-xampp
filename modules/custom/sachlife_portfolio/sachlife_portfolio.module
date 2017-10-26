@@ -1,0 +1,14 @@
+<?php
+function sachlife_portfolio_theme($existing, $type, $theme, $path) {
+  return [
+    'portfoliothreegrid' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'portfolioPage' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'headerimage' => [
+      'variables' => ['content' => ''],
+    ],
+  ];
+}

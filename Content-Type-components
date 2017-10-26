@@ -1,11 +1,16 @@
 Content Types-
-1. Blogs
+1. Blogs (blogs)
 	- Blog sub section (field_blog_sub_section) -> Paragraph (Blog Section)
 	- Body (body)
 	- Header Image (field_blog_header_image)
 	- Tags (field_blog_tags)
-	
-------------------------------------------------
+
+2. Home Page (home_page)
+    - Background Image (field_home_page_image)
+    - Body (body)
+    - Label Text (field_home_page_link_text)
+    - URL (field_home_page_link)
+-----------------------------------------------------------------
 Paragraph Types-
 1. Blog Section (blog_section)
 	- Blog Description (field_blog_description)
@@ -25,3 +30,8 @@ Paragraph Types-
 Taxonomy Types
 1. CATEGORY
 2. Tags
+
+-----------------------------------------------------------------
+People
+    - First Name (field_first_name)
+    - Last Name (field_last_name‎)

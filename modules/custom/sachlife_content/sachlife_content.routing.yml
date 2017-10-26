@@ -1,0 +1,39 @@
+sachlife_content.home:
+  path: 'home'
+  defaults:
+    _controller: '\Drupal\sachlife_content\Controller\SachlifeHomePageController::home'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+
+sachlife_content.aboutus:
+  path: 'about-us'
+  defaults:
+    _controller: '\Drupal\sachlife_content\Controller\SachlifeAboutUsPageController::aboutus'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+
+sachlife_content.aboutme:
+  path: 'about-me'
+  defaults:
+    _controller: '\Drupal\sachlife_content\Controller\SachlifeAboutMePageController::aboutme'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+
+sachlife_content.article:
+  path: 'article/{nid}/{blog}'
+  defaults:
+    _controller: '\Drupal\sachlife_content\Controller\ArticlePageController::article'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+
+sachlife_content.articlelist:
+  path: 'article'
+  defaults:
+    _controller: '\Drupal\sachlife_content\Controller\ArticlePageController::articleList'
+    _title: ''
+  requirements:
+    _access: 'TRUE'

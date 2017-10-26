@@ -1,0 +1,9 @@
+name: Sachlife copyright block
+description: Copyrights informtaion for sachlife.com
+package: Photography
+type: module
+core: '8.x'
+version: 8.0
+dependencies:
+  - drupal:block
+  - drupal:node

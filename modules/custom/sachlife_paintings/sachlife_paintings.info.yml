@@ -1,0 +1,6 @@
+name: Sachlife Paintings
+description: Sachlife Paintings is custom module for Painting Images of Sachlife.com
+package: Photography
+type: module
+core: '8.x'
+version: 8.0

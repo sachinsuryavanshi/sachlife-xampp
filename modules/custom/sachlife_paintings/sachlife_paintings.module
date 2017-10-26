@@ -1,0 +1,14 @@
+<?php
+function sachlife_paintings_theme($existing, $type, $theme, $path) {
+  return [
+    'paintingthreegrid' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'paintingPage' => [
+      'variables' => ['content' => [], 'categoryList' => [] ],
+    ],
+    'headerimage' => [
+      'variables' => ['content' => ''],
+    ],
+  ];
+}

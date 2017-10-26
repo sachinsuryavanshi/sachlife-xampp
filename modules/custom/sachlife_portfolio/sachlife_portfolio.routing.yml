@@ -1,0 +1,14 @@
+sachlife_portfolio.portfoliolist:
+  path: 'portfolio'
+  defaults:
+    _controller: '\Drupal\sachlife_portfolio\Controller\SachlifePortfolioPageController::portfolioList'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+sachlife_portfolio.portfolio:
+  path: 'portfolio/{nid}/{portfolio}'
+  defaults:
+    _controller: '\Drupal\sachlife_portfolio\Controller\SachlifePortfolioPageController::portfolio'
+    _title: ''
+  requirements:
+    _access: 'TRUE'

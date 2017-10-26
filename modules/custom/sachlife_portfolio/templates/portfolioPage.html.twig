@@ -1,0 +1,138 @@
+<section id="content-section" class="portfolio-single portfolio-single-5">
+  {% if content|length > 0 %}
+    <div class="content-wrap">
+      <div class="container full-width">
+        <div class="row f-height">
+          <div class="col-left col-md-4 col-lg-3">
+            <div class="portfolio-info">
+              <div class="portfolio-info-inner">
+                <h1 class="portfolio-title">About Project:</h1>
+                <div class="author">
+                  <a href="#" class="author-avatar bg-image"
+                     style="background-image: url({{ file_url(content.authorAvatar) }}); background-position: 50% 50%;"></a>
+                  <a href="" class="author-info">- Author: {{ content.author }}</a>
+                </div>
+                <div class="album-description margin-top-20">
+                  <div class="al-desc-inner">
+                    <p>{{ content.description|slice(0,150)|raw }}</p>
+
+                    <!-- Begin description toggle (hidden by default) -->
+                    <div class="al-desc-toggle">
+                      <p>{{ content.description|slice(151)|raw }}</p>
+                    </div>
+                    <!-- End description toggle -->
+                  </div>
+
+                  <!-- Begin doggle trigger -->
+                  <div class="al-desc-toggle-trigger">
+                    <span class="al-desc-more"><i class="fa fa-chevron-down"></i> More</span>
+                    <span class="al-desc-less"><i class="fa fa-chevron-up"></i> Less</span>
+                  </div>
+                  <!-- End doggle trigger -->
+                </div>
+                <!-- End portfolio description -->
+
+                <!-- Begin portfolio atr -->
+                <div class="portfolio-atr margin-top-50">
+                  <ul class="list-unstyled">
+                    {% if content.category|length > 0 %}
+                      <li>
+                        <h4 class="head">Category:</h4>
+                        {% for keyCat,valCat in content.category %}
+                          <span class="info"><a href="#">{{ valCat }}</a></span>
+                        {% endfor %}
+                      </li>
+                    {% endif %}
+
+                    {% if content.photographsTags|length > 0 %}
+                      <li>
+                        <h4 class="head">Tags:</h4>
+                        {% for keyTag,valTag in content.photographsTags %}
+                          <span class="info"><a href="#">{{ valTag }}</a></span>
+                        {% endfor %}
+                      </li>
+                    {% endif %}
+                    <!--li class="portfolio-share">
+                      <h4 class="head">Share:</h4>
+                      <span class="info"><a href="#0" title="Share to Facebook"><i
+                            class="fa fa-facebook"></i></a></span>
+                      <span class="info"><a href="#0" title="Share to Twitter"><i
+                            class="fa fa-twitter"></i></a></span>
+                      <span class="info"><a href="#0" title="Share to Google Plus"><i
+                            class="fa fa-google-plus"></i></a></span>
+                      <span class="info"><a href="#0" title="Share to Pinterest"><i
+                            class="fa fa-pinterest"></i></a></span>
+                      <span class="info"><a href="#0" title="Share to Instagram"><i
+                            class="fa fa-instagram"></i></a></span>
+                    </li-->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-right col-md-8 col-lg-9">
+            <div class="isotope gutter-2 col-4">
+              <div class="gallery-top-content margin-bottom-25">
+                <ul class="album-attributes">
+                  <li class="pull-left">
+                    <a class="back-to-list" href="/portfolio">
+                      <span class="bta-icon"><i class="fa fa-th-list"></i></span>
+                      <span class="bta-text">Back to list</span>
+                    </a>
+                  </li>
+                  {% if content.nodeNextNavigation|length > 0 %}
+                    {% for keyNext in content.nodeNextNavigation %}
+                      <li class="portfolio-nav pull-right">
+                        <a href="/portfolio/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
+                           class="pn-link portf-next" title="Next work">
+                          <span class="pn-link-text hide-from-sm">Next</span>
+                          <span class="pn-link-icon"><i class="fa fa-chevron-right"></i></span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endif %}
+                  {% if content.nodePrevNavigation|length > 0 %}
+                    {% for keyPrev in content.nodePrevNavigation %}
+                      <li class="portfolio-nav pull-right">
+                        <a href="/portfolio/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
+                           class="pn-link portf-prev margin-right-15"
+                           title="Previous work">
+                          <span class="pn-link-icon"><i class="fa fa-chevron-left"></i></span>
+                          <span class="pn-link-text hide-from-sm">Prev</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+              <div id="gallery" class="isotope-items-wrap lightgallery">
+                <div class="grid-sizer"></div>
+                {% if content.photographs|length > 0 %}
+                  {% for keyPhoto in content.photographs %}
+                    <div class="isotope-item sachlife">
+                      <div class="album-single-item">
+                        <img class="asi-img" src="{{ file_url(keyPhoto.target_id|image_style('portfolio_grid_thumbnail')) }}" alt="image">
+                        <div class="asi-cover">
+                          <a class="asi-link lg-trigger" href="{{ file_url(keyPhoto.target_id) }}"
+                             data-exthumbnail="{{ file_url(keyPhoto.target_id|image_style('photographs_thumbnail')) }}"
+                             data-sub-html="<h4>{{ keyPhoto.title }}</h4>
+                             <p>{{ keyPhoto.title }}</p>">
+                            <div class="asi-info">
+                              <h2 class="asi-title">{{ keyPhoto.title }}</h2>
+                              <h5 class="asi-sub-title">#{{ keyPhoto.alt }}</h5>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>

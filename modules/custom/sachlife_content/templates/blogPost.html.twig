@@ -1,0 +1,79 @@
+<div class="col-md-8">
+  {% if content|length > 0 %}
+    {% for key1 in content %}
+      <div class="blog-single-post">
+        <div class="blog-single-attributes margin-bottom-40">
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="blog-single-meta-wrap">
+                <a href="" class="author-avatar pull-left bg-image"
+                   style="background-image: url({{ file_url(key1.avatar) }});"></a>
+                <div class="blog-single-meta">
+                  <h4 class="article-author">Author: <a href="#">{{ key1.author }}</a></h4>
+                  <div class="article-time-cat">
+                    <span class="article-time">{{ key1.created|date('d M Y') }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="post-content lightgallery">
+          {{ key1.description|raw }}
+          {% if key1.paragraph|length > 0 %}
+            {% for key2 in key1.paragraph %}
+              {{ key2.blogDescription|raw }}
+              <a href="" class="lg-trigger" data-exthumbnail="">
+                <img src="{{ file_url(key2.blogImage) }}" alt="image">
+              </a>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="blog-single-attributes margin-top-60">
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="blog-single-tags">
+                <ul class="list-unstyled list-inline">
+                  <li><span><i class="fa fa-tags"></i> tags:</span></li>
+                  {% if key1.term|length > 0 %}
+                    {% for key3,value3 in key1.term %}
+                      <li><a href="{{ key3 }}">#{{ value3 }}</a></li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="blog-single-nav">
+        <div class="row">
+          <div class="col-sm-6">
+            {% if key1.nodePrevNavigation|length > 0 %}
+            {% for key3 in key1.nodePrevNavigation %}
+            <div class="prev-post">
+              <div class="prev-post-info">
+                <a href="/article/{{ key3.nid }}/{{ key3.title|replace({' ':'-'}) }}"><i class="fa fa-chevron-left"></i> Prev<span class="hide-from-xs">ious</span> Post</a>
+                <h4 class="prev-post-title">{{ key3.title }}</h4>
+              </div>
+            </div>
+            {% endfor %}
+          {% endif %}
+          </div>
+          <div class="col-sm-6 text-right">
+            {% if key1.nodeNextNavigation|length > 0 %}
+            {% for key4 in key1.nodeNextNavigation %}
+            <div class="next-post">
+              <div class="prev-post-info">
+                <a href="/article/{{ key4.nid }}/{{ key4.title|replace({' ':'-'}) }}">Next<span class="hidden-md"> Post</span> <i class="fa fa-chevron-right"></i></a>
+                <h4 class="next-post-title">{{ key4.title }}</h4>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>

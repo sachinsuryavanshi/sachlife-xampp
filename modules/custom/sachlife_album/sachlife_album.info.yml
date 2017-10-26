@@ -1,0 +1,6 @@
+name: Sachlife Album List
+description: Sachlife Album List is custom module for Album view of Images
+package: Photography
+type: module
+core: '8.x'
+version: 8.0

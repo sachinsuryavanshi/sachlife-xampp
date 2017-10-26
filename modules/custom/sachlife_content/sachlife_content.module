@@ -1,0 +1,60 @@
+<?php
+use \Drupal\node\Entity;
+
+function sachlife_content_theme($existing, $type, $theme, $path) {
+  return array(
+    'homepage' => array(
+      'variables'=> array('content'=>[]),
+    ),
+    'ourstory' => array(
+      'variables'=> array('content' => []),
+    ),
+    'aboutme' => array(
+      'variables'=> array('content' => []),
+    ),
+    'blogPost' => array(
+      'variables'=> array('content' => []),
+    ),
+    'blogList' => array(
+      'variables'=> array('content' => []),
+    ),
+    'headerimage' => array(
+      'variables'=> array('content' => ''),
+    ),
+    'recentposts' => array(
+      'variables'=> array('content' => []),
+    ),
+  );
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function sachlife_content_page_attachments(array &$page) {
+  $parameters = \Drupal::routeMatch()->getParameters();
+  $nid = $parameters->get('nid');
+  if($nid){
+    $nodeDetails = Entity\Node::load($nid);
+    $descriptionValue = $nodeDetails->get('body')->summary;
+    $contentValue = $nodeDetails->getTitle();
+  }else{
+    $descriptionValue = 'This is my site';
+    $contentValue = 'Chambu Bambu';
+  }
+  $description = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'name' => 'description',
+      'content' => $descriptionValue,
+    ],
+  ];
+  $title = [
+    '#tag' => 'meta',
+    '#attributes' => [
+      'name' => 'title',
+      'content' => $contentValue,
+    ],
+  ];
+  $page['#attached']['html_head'][] = [$description, 'description'];
+  $page['#attached']['html_head'][] = [$title, 'title'];
+}

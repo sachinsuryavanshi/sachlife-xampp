@@ -1,0 +1,14 @@
+sachlife_album.albumlist:
+  path: 'album'
+  defaults:
+    _controller: '\Drupal\sachlife_album\Controller\SachlifeAlbumPageController::albumList'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
+sachlife_album.album:
+  path: 'albumPage/{nid}/{portfolio}'
+  defaults:
+    _controller: '\Drupal\sachlife_album\Controller\SachlifeAlbumPageController::album'
+    _title: ''
+  requirements:
+    _access: 'TRUE'
