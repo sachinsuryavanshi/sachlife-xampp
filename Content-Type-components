@@ -1,0 +1,29 @@
+Content Types-
+
+1. Blogs
+	- Blog sub section (field_blog_sub_section) -> Paragraph (Blog Section)
+	- Body (body)
+	- Header Image (field_blog_header_image)
+	- Tags (field_blog_tags)
+
+
+Paragraph Types-
+1. Blog Section (blog_section)
+	- Blog Description (field_blog_description)
+	- Blog Image (field_blog_section_image)
+
+2. Social Media Links (social_media_links)
+	- Social Link Class (field_social_link_class)
+	- Social URL (field_social_url)
+	- Social URL Title (field_social_url_title)
+
+3. Our Story Section (our_story_section)
+	- Social Media Information (field_social_media_information) -> Paragraph (Social Media Links)
+	- User Name (field_user_name)
+	- User Profile Image (field_user_profile_image)
+
+
+Taxonomy Types
+
+1. CATEGORY
+2. Tags
