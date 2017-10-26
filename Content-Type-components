@@ -1,12 +1,11 @@
 Content Types-
-
 1. Blogs
 	- Blog sub section (field_blog_sub_section) -> Paragraph (Blog Section)
 	- Body (body)
 	- Header Image (field_blog_header_image)
 	- Tags (field_blog_tags)
-
-
+	
+------------------------------------------------
 Paragraph Types-
 1. Blog Section (blog_section)
 	- Blog Description (field_blog_description)
@@ -22,8 +21,7 @@ Paragraph Types-
 	- User Name (field_user_name)
 	- User Profile Image (field_user_profile_image)
 
-
+-----------------------------------------------------------------
 Taxonomy Types
-
 1. CATEGORY
 2. Tags
