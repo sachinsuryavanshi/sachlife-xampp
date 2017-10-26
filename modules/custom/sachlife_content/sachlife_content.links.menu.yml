@@ -1,0 +1,27 @@
+sachlife_content.home:
+  title: 'Home'
+  description: 'Home page for Sachlife.com application'
+  route_name: sachlife_content.home
+  weight: -100
+  menu_name: main
+
+sachlife_content.aboutus:
+  title: 'About Us'
+  description: 'About Us for Sachlife.com application'
+  route_name: sachlife_content.aboutus
+  weight: -90
+  menu_name: main
+
+sachlife_content.aboutme:
+  title: 'About Me'
+  description: 'About Me for Sachlife.com application'
+  route_name: sachlife_content.aboutme
+  weight: -80
+  menu_name: main
+
+sachlife_content.articlelisting:
+  title: 'Article'
+  description: 'Article for Sachlife.com application'
+  route_name: sachlife_content.articlelist
+  weight: -70
+  menu_name: main

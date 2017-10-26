@@ -1,0 +1,6 @@
+sachlife_album.albumlist:
+  title: 'Album'
+  description: 'Album listing page for Sachlife.com application'
+  route_name: sachlife_album.albumlist
+  weight: -40
+  menu_name: main

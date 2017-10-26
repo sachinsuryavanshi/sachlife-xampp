@@ -10,6 +10,37 @@ Content Types-
     - Body (body)
     - Label Text (field_home_page_link_text)
     - URL (field_home_page_link)
+
+3. Our Story (our_story)
+    - Background Image (field_story_background_image)
+    - Body (body)
+    - Team Member Information (field_team_member_information) -> Paragraph (Our Story Section)
+
+4. About Me (about_me)
+    - Body (body)
+    - Header Image (field_about_me_header_image)
+    - Interest options (field_interest)
+    - Profile Image	(field_about_me_user_profile)
+    - Social Media Links (field_about_me_social_links)-> Paragraph (Social Media Links)
+
+5. Photographs (photographs)
+    - Body (body)
+    - Category Section (field_category_section) -> Taxonomy (CATEGORY)
+    - Photographs (field_photographs)
+    - Photography Tags (field_photography_tags) -> Taxonomy (Tags)
+
+6. Photo Album (photo_album)
+    - Body (body)
+    - Category Section (field_category_section)
+    - Photography Tags (field_photography_tags)
+    - Photographs (field_photographs)
+
+7. Paintings (paintings)
+    - Body (body)
+    - Category Section (field_category_section)
+    - Painting Tags (field_photography_tags)
+    - Paintings (field_paintings)
+
 -----------------------------------------------------------------
 Paragraph Types-
 1. Blog Section (blog_section)
@@ -35,3 +66,14 @@ Taxonomy Types
 People
     - First Name (field_first_name)
     - Last Name (field_last_name‎)
+
+----------------------------------------------------------------
+Image Style
+    - Photographs Thumbnail
+        (photographs_thumbnail)
+    - Portfolio Grid(860* 645)
+        (portfolio_grid_thumbnail)
+    - Thumbnail (140×140)
+        (thumbnail)
+     - Grid(1060 * 618)
+        (grid)

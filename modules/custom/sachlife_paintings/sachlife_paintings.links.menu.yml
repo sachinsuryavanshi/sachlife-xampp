@@ -1,0 +1,6 @@
+sachlife_paintings.paintingslist:
+  title: 'Paintings'
+  description: 'Painting listing page for Sachlife.com application'
+  route_name: sachlife_paintings.paintingslist
+  weight: -50
+  menu_name: main

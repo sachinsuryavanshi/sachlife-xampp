@@ -1,0 +1,6 @@
+sachlife_portfolio.portfoliolist:
+  title: 'Portfolio'
+  description: 'Portfolio listing page for Sachlife.com application'
+  route_name: sachlife_portfolio.portfoliolist
+  weight: -60
+  menu_name: main
