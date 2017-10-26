@@ -1,0 +1,74 @@
+google:
+  version: VERSION
+  css:
+    theme:
+      https://fonts.googleapis.com/css?family=Roboto+Mono:400,300,500,700,100: {}
+bootstrap:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/bootstrap/css/bootstrap.min.css: {}
+  js:
+    assets/vendor/bootstrap/js/bootstrap.min.js: {preprocess: 0, weight: -12}
+    
+font-awesome:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/font-awesome/css/font-awesome.min.css: {}
+lightgallery:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/lightgallery/css/lightgallery.min.css: {}
+  js:
+    assets/vendor/lightgallery/js/lightgallery.min.js: {preprocess: 0, weight: -11}
+    assets/vendor/lightgallery/js/lightgallery-plugins.js: {preprocess: 0, weight: -10}
+
+    
+ytplayer:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/ytplayer/css/jquery.mb.YTPlayer.min.css: {}
+  js:
+    assets/vendor/ytplayer/js/jquery.mb.YTPlayer.min.js: {preprocess: 0, weight: -3}
+owl-carousel:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/owl-carousel/css/owl.carousel.min.css: {}
+      assets/vendor/owl-carousel/css/owl.theme.default.min.css: {}
+  js:
+    assets/vendor/owl-carousel/js/owl.carousel.min.js: {preprocess: 0, weight: -2}
+animate-css:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/animate.min.css: {}
+global-css:
+  version: VERSION
+  css:
+    theme:
+      assets/css/theme.css: {}
+      assets/css/helper.css: {}
+justifiedgallery:
+  version: VERSION
+  css:
+    theme:
+      assets/vendor/justifiedgallery/css/justifiedGallery.min.css: {}
+  js:
+    assets/vendor/justifiedgallery/js/jquery.justifiedGallery.min.js: {preprocess: 0, weight: -5}
+global-js:
+  version: VERSION
+  js:
+    assets/vendor/jquery/jquery.min.js: {preprocess: 0, weight: -13}
+    assets/vendor/jquery.mousewheel.min.js: {preprocess: 0, weight: -9}
+    assets/vendor/jquery.easing.min.js: {preprocess: 0, weight: -8}
+    assets/vendor/isotope.pkgd.min.js: {preprocess: 0, weight: -7}
+    assets/vendor/imagesloaded.pkgd.min.js: {preprocess: 0, weight: -6}
+    assets/vendor/smoothscroll.js: {preprocess: 0, weight: -4}
+themepage-js:
+  version: VERSION
+  js:
+    assets/js/theme.js: {preprocess: 0, weight: -1}

@@ -1,0 +1,5 @@
+# Schema for the configuration files of the Sachlife theme.
+
+sachlife.settings:
+  type: theme_settings
+  label: 'Sachlife settings'

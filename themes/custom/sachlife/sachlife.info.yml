@@ -1,0 +1,35 @@
+name: Sachlife
+description: Sachlife- Photography Blog Site Theme
+type: theme
+core: 8.x
+libraries:
+  - sachlife/google
+  - sachlife/bootstrap
+  - sachlife/font-awesome
+  - sachlife/lightgallery
+  - sachlife/ytplayer
+  - sachlife/owl-carousel
+  - sachlife/animate-css
+  - sachlife/animate
+  - sachlife/global-css
+  - sachlife/global-js
+  - sachlife/justifiedgallery
+  - sachlife/themepage-js
+regions:
+  preloader: Pre Loader
+  headerImage: header Image
+  heading: header Text
+  categories: Blog Categories
+  posts: Blog Recent Post
+  search: Search Filter
+  header_1: Header 1
+  header_2: Header 2
+  side_bar: Right side navigation
+  content: Content
+  footer1: Footer 1  
+  footer2: Footer 2
+stylesheets-remove:
+  - core/assets/vendor/normalize-css/normalize.css
+  - core/modules/system/css/system.module.css
+  - core/modules/system/css/system.theme.css
+  - core/modules/views/css/views.module.css
