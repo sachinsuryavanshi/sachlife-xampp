@@ -33,7 +33,7 @@
         <div class="album-nav">
           {% if content.nodePrevNavigation|length > 0 %}
             {% for keyPrev in content.nodePrevNavigation %}
-              <a href="/albumPage/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
+              <a href="{{ url('<front>') }}albumPage/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
                  class="an-item prev-album bg-image"
                  style="background-image: url(assets/img/album-list/grid/img-2.jpg); background-position: 50% 50%;"
                  title="Previous album">
@@ -45,7 +45,7 @@
               </a>
             {% endfor %}
           {% endif %}
-          <a href="/album" class="an-item to-album-list bg-image"
+          <a href="{{ url('<front>') }}album" class="an-item to-album-list bg-image"
              style="background-image: url(assets/img/album-list/grid/img-4.jpg); background-position: 50% 50%;"
              title="Back to album list">
             <!-- Element cover -->
@@ -58,7 +58,7 @@
           </a>
           {% if content.nodeNextNavigation|length > 0 %}
             {% for keyNext in content.nodeNextNavigation %}
-              <a href="/albumPage/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
+              <a href="{{ url('<front>') }}albumPage/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
                  class="an-item next-album bg-image"
                  style="background-image: url(assets/img/album-list/grid/img-7.jpg); background-position: 50% 50%;"
                  title="Next album">
@@ -114,7 +114,7 @@
       {% if content.nodePrevNavigation|length > 0 %}
       {% for keyPrev in content.nodePrevNavigation %}
       <div class="abn-item prev-album">
-        <a href="/albumPage/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}" title="Previous album">
+        <a href="{{ url('<front>') }}albumPage/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}" title="Previous album">
           <span class="abn-icon"><i class="fa fa-chevron-left"></i></span>
           <span class="abn-text">Prev<span class="hide-from-xs">ious</span> Album</span>
         </a>
@@ -124,7 +124,7 @@
       {% if content.nodeNextNavigation|length > 0 %}
       {% for keyNext in content.nodeNextNavigation %}
       <div class="abn-item next-album">
-        <a href="/albumPage/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}" title="Next album">
+        <a href="{{ url('<front>') }}albumPage/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}" title="Next album">
           <span class="abn-text">Next Album</span>
           <span class="abn-icon"><i class="fa fa-chevron-right"></i></span>
         </a>

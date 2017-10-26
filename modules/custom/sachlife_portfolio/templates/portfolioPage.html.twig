@@ -75,7 +75,7 @@
               <div class="gallery-top-content margin-bottom-25">
                 <ul class="album-attributes">
                   <li class="pull-left">
-                    <a class="back-to-list" href="/portfolio">
+                    <a class="back-to-list" href="{{ url('<front>') }}portfolio">
                       <span class="bta-icon"><i class="fa fa-th-list"></i></span>
                       <span class="bta-text">Back to list</span>
                     </a>
@@ -83,7 +83,7 @@
                   {% if content.nodeNextNavigation|length > 0 %}
                     {% for keyNext in content.nodeNextNavigation %}
                       <li class="portfolio-nav pull-right">
-                        <a href="/portfolio/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
+                        <a href="{{ url('<front>') }}portfolio/{{ keyNext.nid }}/{{ keyNext.title|replace({' ':'-'}) }}"
                            class="pn-link portf-next" title="Next work">
                           <span class="pn-link-text hide-from-sm">Next</span>
                           <span class="pn-link-icon"><i class="fa fa-chevron-right"></i></span>
@@ -94,7 +94,7 @@
                   {% if content.nodePrevNavigation|length > 0 %}
                     {% for keyPrev in content.nodePrevNavigation %}
                       <li class="portfolio-nav pull-right">
-                        <a href="/portfolio/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
+                        <a href="{{ url('<front>') }}portfolio/{{ keyPrev.nid }}/{{ keyPrev.title|replace({' ':'-'}) }}"
                            class="pn-link portf-prev margin-right-15"
                            title="Previous work">
                           <span class="pn-link-icon"><i class="fa fa-chevron-left"></i></span>

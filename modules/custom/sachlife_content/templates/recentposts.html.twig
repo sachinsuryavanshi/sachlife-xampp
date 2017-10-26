@@ -8,7 +8,7 @@
           <li>
             <div class="post-data">
               <h5 class="post-title">
-                <a href="/article/{{ key.nid }}/{{ key.title|replace({' ':'-'}) }}">
+                <a href="{{ url('<front>') }}article/{{ key.nid }}/{{ key.title|replace({' ':'-'}) }}">
                   {{ key.title }}
                 </a>
               </h5>

@@ -53,7 +53,7 @@
             {% for key3 in key1.nodePrevNavigation %}
             <div class="prev-post">
               <div class="prev-post-info">
-                <a href="/article/{{ key3.nid }}/{{ key3.title|replace({' ':'-'}) }}"><i class="fa fa-chevron-left"></i> Prev<span class="hide-from-xs">ious</span> Post</a>
+                <a href="{{ url('<front>') }}article/{{ key3.nid }}/{{ key3.title|replace({' ':'-'}) }}"><i class="fa fa-chevron-left"></i> Prev<span class="hide-from-xs">ious</span> Post</a>
                 <h4 class="prev-post-title">{{ key3.title }}</h4>
               </div>
             </div>
@@ -65,7 +65,7 @@
             {% for key4 in key1.nodeNextNavigation %}
             <div class="next-post">
               <div class="prev-post-info">
-                <a href="/article/{{ key4.nid }}/{{ key4.title|replace({' ':'-'}) }}">Next<span class="hidden-md"> Post</span> <i class="fa fa-chevron-right"></i></a>
+                <a href="{{ url('<front>') }}article/{{ key4.nid }}/{{ key4.title|replace({' ':'-'}) }}">Next<span class="hidden-md"> Post</span> <i class="fa fa-chevron-right"></i></a>
                 <h4 class="next-post-title">{{ key4.title }}</h4>
               </div>
             </div>
