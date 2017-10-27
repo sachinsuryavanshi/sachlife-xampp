@@ -1,6 +1,14 @@
 <?php
 use \Drupal\node\Entity;
 
+/**
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ *
+ * @return array
+ */
 function sachlife_content_theme($existing, $type, $theme, $path) {
   return array(
     'homepage' => array(
@@ -57,4 +65,17 @@ function sachlife_content_page_attachments(array &$page) {
   ];
   $page['#attached']['html_head'][] = [$description, 'description'];
   $page['#attached']['html_head'][] = [$title, 'title'];
+}
+
+/**
+ * @param $account
+ * Hook User login for redirection after login
+ * User will redirect to Administrator page
+ */
+function sachlife_content_user_login($account) {
+  global $base_url;
+  $url = $base_url.'/admin';
+  $response = new Symfony\Component\HttpFoundation\RedirectResponse($url);
+  $response->send();
+  return;
 }

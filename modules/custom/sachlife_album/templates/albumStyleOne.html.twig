@@ -35,7 +35,7 @@
                 {% for key,value in content %}
                   <div class="isotope-item {{ value.category|lower }}">
                     <div class="album-list-item">
-                      <a class="ali-link" href="/albumPage/{{ key }}/{{ value.title|replace({' ':'-'}) }}">
+                      <a class="ali-link" href="{{ url('<front>') }}albumPage/{{ key }}/{{ value.title|replace({' ':'-'}) }}">
                         <div class="ali-img-wrap">
                           <img class="ali-img"
                                src="{{ file_url(value.coverPhoto|image_style('portfolio_grid_thumbnail')) }}"

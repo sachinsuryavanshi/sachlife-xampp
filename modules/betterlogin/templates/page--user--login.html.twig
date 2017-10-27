@@ -1,0 +1,17 @@
+<div id="auth_box" class="login">
+  <div id="top_part">
+    <h1 id="the_logo">
+      <a href="{{ url('<front>') }}">
+        <img src="{{ logo }}" alt="{{ site_name }}" />
+      </a>
+    </h1>
+  </div>
+
+  <div id="middle_part">
+    <h2 class="title">{{ title }}</h2>
+
+    {{ messages }}
+
+    {{ page.content }}
+  </div>
+</div>
