@@ -107,7 +107,7 @@ user.pass:
     _form: '\Drupal\user\Form\UserPasswordForm'
     _title: 'Reset your password'
   requirements:
-    _access: 'TRUE'
+    _user_is_logged_in: 'TRUE'
   options:
     _maintenance_access: TRUE
 
