@@ -340,7 +340,8 @@ section {
 	letter-spacing: 6px;
 }
 #logo img {
-	max-height: 38px;
+	/*max-height: 38px;*/
+	max-height: 70px;
 }
 
 /* Disable logo-light */

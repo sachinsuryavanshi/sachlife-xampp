@@ -14,26 +14,24 @@ use Drupal\Core\Block\BlockBase;
  */
 class SocialIconBlock extends BlockBase {
 
-    /**
-     * {@inheritdoc}
-     */
-    public function build() {
-        $content = '';
-
-
-        $content .='<div class="social-icons">';
-        $content .='<ul>';
-        $content .='<li><a target="_blank" href="https://www.facebook.com" title="Follow us on Facebook"><i class="fa fa-facebook"></i></a></li>';
-        $content .='<li><a target="_blank" href="https://twitter.com/" title="Follow us on Twitter"><i class="fa fa-twitter"></i></a></li>';
-        $content .='<li><a target="_blank" href="https://www.pinterest.com" title="Follow us on Pinterest"><i class="fa fa-pinterest"></i></a></li>';
-        $content .='<li><a target="_blank" href="https://www.instagram.com" title="Follow us on Instagram"><i class="fa fa-instagram"></i></a></li>';
-        $content .='<li><a target="_blank" href="mailto:your@email.com" title="Contact Us"><i class="fa fa-envelope"></i></a></li>';
-        $content .='</ul>';
-        $content .='</div>';
-        return array(
-            '#type' => 'markup',
-            '#markup' => $content,
-        );
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $content = '';
+    $content .= '<div class="social-icons">';
+    $content .= '<ul>';
+    $content .= '<li><a target="_blank" href="https://www.facebook.com/sachlife" title="Follow us on Facebook"><i class="fa fa-facebook"></i></a></li>';
+    $content .= '<li><a target="_blank" href="https://twitter.com/sachlife_pics" title="Follow us on Twitter"><i class="fa fa-twitter"></i></a></li>';
+    $content .= '<li><a target="_blank" href="https://in.pinterest.com/imsuryavanshi3/" title="Follow us on Pinterest"><i class="fa fa-pinterest"></i></a></li>';
+    $content .= '<li><a target="_blank" href="https://www.instagram.com/sachlifeblogs/" title="Follow us on Instagram"><i class="fa fa-instagram"></i></a></li>';
+    $content .= '<li><a target="_blank" href="mailto:sachlifeinfo@gmail.com" title="Contact Us"><i class="fa fa-envelope"></i></a></li>';
+    $content .= '</ul>';
+    $content .= '</div>';
+    return [
+      '#type' => 'markup',
+      '#markup' => $content,
+    ];
+  }
 
 }
