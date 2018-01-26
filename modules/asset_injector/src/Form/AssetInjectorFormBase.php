@@ -2,10 +2,16 @@
 
 namespace Drupal\asset_injector\Form;
 
-use Drupal;
+use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\Entity\NodeType;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Form\SubformState;
+use Drupal\Core\Plugin\PluginFormFactoryInterface;
+use Drupal\Core\Executable\ExecutableManagerInterface;
+use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Plugin\Context\ContextRepositoryInterface;
 
 /**
  * Class AssetInjectorCsssForm.
@@ -15,13 +21,114 @@ use Drupal\node\Entity\NodeType;
 class AssetInjectorFormBase extends EntityForm {
 
   /**
+   * Database log the creation/edit/deletion of an asset.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannel
+   */
+  private $logger;
+
+  /**
+   * The Asset entity.
+   *
+   * @var \Drupal\asset_injector\AssetInjectorInterface
+   */
+  protected $entity;
+
+  /**
+   * The condition plugin manager.
+   *
+   * @var \Drupal\Core\Condition\ConditionManager
+   */
+  protected $manager;
+
+  /**
+   * The event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $language;
+
+  /**
+   * The theme handler.
+   *
+   * @var \Drupal\Core\Extension\ThemeHandler
+   */
+  protected $themeHandler;
+
+  /**
+   * The context repository service.
+   *
+   * @var \Drupal\Core\Plugin\Context\ContextRepositoryInterface
+   */
+  protected $contextRepository;
+
+  /**
+   * The plugin form manager.
+   *
+   * @var \Drupal\Core\Plugin\PluginFormFactoryInterface
+   */
+  protected $pluginFormFactory;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('logger.factory')->get('asset_injector'),
+      $container->get('plugin.manager.condition'),
+      $container->get('context.repository'),
+      $container->get('language_manager'),
+      $container->get('theme_handler'),
+      $container->get('plugin_form.factory')
+    );
+  }
+
+  /**
+   * AssetInjectorFormBase constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannel $logger_factory
+   *   Logs the actions.
+   * @param \Drupal\Core\Executable\ExecutableManagerInterface $manager
+   *   The ConditionManager for building the conditions UI.
+   * @param \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository
+   *   The lazy context repository service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language
+   *   The language manager.
+   * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+   *   The theme handler.
+   * @param \Drupal\Core\Plugin\PluginFormFactoryInterface $plugin_form_manager
+   *   The plugin form manager.
+   */
+  public function __construct(LoggerChannel $logger_factory, ExecutableManagerInterface $manager, ContextRepositoryInterface $context_repository, LanguageManagerInterface $language, ThemeHandlerInterface $theme_handler, PluginFormFactoryInterface $plugin_form_manager) {
+    $this->logger = $logger_factory;
+    $this->manager = $manager;
+    $this->contextRepository = $context_repository;
+    $this->language = $language;
+    $this->themeHandler = $theme_handler;
+    $this->pluginFormFactory = $plugin_form_manager;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    $form['#tree'] = TRUE;
+    // Store the gathered contexts in the form state for other objects to use
+    // during form building.
+    $form_state->setTemporaryValue('gathered_contexts', $this->contextRepository->getAvailableContexts());
+
     /** @var \Drupal\asset_injector\Entity\AssetInjectorBase $entity */
     $entity = $this->entity;
+
     $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
@@ -55,80 +162,96 @@ class AssetInjectorFormBase extends EntityForm {
       '#suffix' => '<div class="resizable"><div class="ace-editor"></div></div></div>',
     ];
 
-    // Advanced options fieldset.
-    $form['advanced'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Advanced options'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
+    $form['conditions'] = $this->buildConditionsInterface([], $form_state);
+    $form['conditions']['#weight'] = 99;
+
+    $form['conditions_and_or'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Condition Requirements'),
+      '#group' => 'conditions_tabs',
+      '#weight' => 999,
+      '#tree' => FALSE,
     ];
 
-    $node_types = NodeType::loadMultiple();
-    foreach ($node_types as $key => &$type) {
-      $type = $type->get('name');
-    }
-    $node_types[''] = $this->t('-- None --');
-    asort($node_types);
-
-    $form['advanced']['nodeType'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Node Type'),
-      '#options' => $node_types,
-      '#default_value' => $entity->nodeType,
+    $form['conditions_and_or']['conditions_require_all'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Require all conditions'),
+      '#description' => $this->t('Check to require all conditions. Leave uncheck to require any condition.'),
+      '#default_value' => $entity->conditions_require_all,
     ];
 
-    $themes = [];
-    foreach (system_list('theme') as $key => $theme) {
-      if ($theme->status) {
-        $themes[$key] = $theme->info['name'];
-      }
-    }
+    $form['#attached']['library'][] = 'asset_injector/ace-editor';
+    return $form;
+  }
 
-    $form['advanced']['themes'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Theme'),
-      '#description' => $this->t('Which themes is the @type used. Leave unselected to apply to all themes.', [
-        '@type' => $entity->getEntityType()->getLabel(),
-      ]),
-      '#options' => $themes,
-      '#multiple' => TRUE,
-      '#default_value' => $entity->themes,
-    ];
-    $form['page_visibility'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Pages'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-      '#states' => [
-        'visible' => [
-          ':input[name="nodeType"]' => ['value' => ''],
+  /**
+   * Helper function for building the conditions UI form.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form array with the conditions UI added in.
+   */
+  protected function buildConditionsInterface(array $form, FormStateInterface $form_state) {
+    $form['conditions_tabs'] = [
+      '#type' => 'vertical_tabs',
+      '#title' => $this->t('Conditions'),
+      '#parents' => ['conditions_tabs'],
+      '#attached' => [
+        'library' => [
+          'asset_injector/asset_injector',
         ],
       ],
     ];
-    $form['page_visibility']['visibility'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('Add @type to specific pages', [
-        '@type' => $entity->getEntityType()->getLabel(),
-      ]),
-      '#options' => [
-        0 => $this->t('Every page except the listed pages'),
-        1 => $this->t('The listed pages only'),
-      ],
-      '#default_value' => $entity->visibility ? $entity->visibility : 0,
-    ];
-    $form['page_visibility']['pages'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Pages'),
-      '#title_display' => 'invisible',
-      '#default_value' => $entity->pages,
-      '#description' => $this->t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", [
-        '%blog' => '/blog',
-        '%blog-wildcard' => '/blog/*',
-        '%front' => '<front>',
-      ]),
-      '#rows' => 5,
-    ];
-    $form['#attached']['library'][] = 'asset_injector/ace-editor';
+
+    // @todo Allow list of conditions to be configured in
+    //   https://www.drupal.org/node/2284687.
+    $conditions = $this->entity->getConditions();
+    foreach ($this->manager->getDefinitionsForContexts($form_state->getTemporaryValue('gathered_contexts')) as $condition_id => $definition) {
+      // Don't display the language condition until we have multiple languages.
+      if ($condition_id == 'language' && !$this->language->isMultilingual()) {
+        continue;
+      }
+
+      $condition_config = isset($conditions[$condition_id]) ? $conditions[$condition_id] : [];
+      /** @var \Drupal\Core\Condition\ConditionInterface $condition */
+      $condition = $this->manager->createInstance($condition_id, $condition_config);
+      $form_state->set(['conditions', $condition_id], $condition);
+      $condition_form = $condition->buildConfigurationForm([], $form_state);
+      $condition_form['#type'] = 'details';
+      $condition_form['#title'] = $condition->getPluginDefinition()['label'];
+      $condition_form['#group'] = 'conditions_tabs';
+
+      if ($condition_id == 'current_theme') {
+        $condition_form['theme']['#multiple'] = TRUE;
+      }
+
+      $form[$condition_id] = $condition_form;
+    }
+
+    // Modify the titles of the node_type plugin & hide negate.
+    if (isset($form['node_type'])) {
+      $form['node_type']['#title'] = $this->t('Content types');
+      $form['node_type']['bundles']['#title'] = $this->t('Content types');
+      $form['node_type']['negate']['#type'] = 'hidden';
+      $form['node_type']['negate']['#value'] = $form['node_type']['negate']['#default_value'];
+    }
+
+    // Modify the request_path negate to a radio button.
+    if (isset($form['request_path'])) {
+      $form['request_path']['#title'] = $this->t('Pages');
+      $form['request_path']['negate']['#type'] = 'radios';
+      $form['request_path']['negate']['#default_value'] = (int) $form['request_path']['negate']['#default_value'];
+      $form['request_path']['negate']['#title_display'] = 'invisible';
+      $form['request_path']['negate']['#options'] = [
+        $this->t('Show for the listed pages'),
+        $this->t('Hide for the listed pages'),
+      ];
+    }
+
     return $form;
   }
 
@@ -145,6 +268,71 @@ class AssetInjectorFormBase extends EntityForm {
       '#weight' => 7,
     ];
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+
+    $conditions = $form_state->getValue('conditions');
+    // Validate conditions condition settings.
+    foreach ($conditions as $condition_id => &$values) {
+
+      // Since core theme condition doesn't support multiple theme choices, if
+      // no themes are selected, we change it to an empty string so that the
+      // plugin validation and submit will function as expected.
+      if ($condition_id == 'current_theme' && empty($values['theme'])) {
+        $values['theme'] = '';
+        $form_state->setValue('conditions', $conditions);
+      }
+
+      // All condition plugins use 'negate' as a Boolean in their schema.
+      // However, certain form elements may return it as 0/1. Cast here to
+      // ensure the data is in the expected type.
+      if (array_key_exists('negate', $values)) {
+        $form_state->setValue([
+          'conditions',
+          $condition_id,
+          'negate',
+        ], (bool) $values['negate']);
+      }
+
+      // Allow the condition to validate the form.
+      $condition = $form_state->get(['conditions', $condition_id]);
+
+      // Fix some issues with webform & context with their entity_bundle
+      // conditions. Even with the array empty, the condition still saves
+      // with values. This produces logic issues when resolving the conditions.
+      // @see https://www.drupal.org/node/2857279
+      $values = $form_state->getValue(['conditions', $condition_id]);
+      foreach ($values as &$value) {
+        if (is_array($value)) {
+          $value = array_filter($value);
+        }
+      }
+      $form_state->setValue(['conditions', $condition_id], $values);
+
+      $condition->validateConfigurationForm($form['conditions'][$condition_id], SubformState::createForSubform($form['conditions'][$condition_id], $form, $form_state));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    parent::submitForm($form, $form_state);
+
+    foreach ($form_state->getValue('conditions') as $condition_id => $values) {
+      // Allow the condition to submit the form.
+      $condition = $form_state->get(['conditions', $condition_id]);
+      $condition->submitConfigurationForm($form['conditions'][$condition_id], SubformState::createForSubform($form['conditions'][$condition_id], $form, $form_state));
+      $condition_configuration = $condition->getConfiguration();
+      // Update the conditions conditions on the asset.
+      $this->entity->getConditionsCollection()
+        ->addInstanceId($condition_id, $condition_configuration);
+    }
   }
 
   /**
@@ -169,7 +357,7 @@ class AssetInjectorFormBase extends EntityForm {
         $log = '%type asset %id saved';
     }
     drupal_set_message($message);
-    Drupal::logger('asset_injector')->notice($log, [
+    $this->logger->notice($log, [
       '%type' => $entity->getEntityTypeId(),
       '%id' => $entity->id(),
     ]);

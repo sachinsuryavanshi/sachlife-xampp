@@ -10,6 +10,7 @@ namespace Drupal\asset_injector\Entity;
  *   label = @Translation("Css Injector"),
  *   list_cache_tags = { "library_info" },
  *   handlers = {
+ *     "access" = "Drupal\asset_injector\AssetInjectorAccessControlHandler",
  *     "list_builder" = "Drupal\asset_injector\AssetInjectorListBuilder",
  *     "form" = {
  *       "add" = "Drupal\asset_injector\Form\AssetInjectorCssForm",
@@ -33,18 +34,11 @@ namespace Drupal\asset_injector\Entity;
  *     "delete-form" = "/admin/config/development/asset-injector/css/{asset_injector_css}/delete",
  *     "enable" = "/admin/config/development/asset-injector/css/{asset_injector_css}/enable",
  *     "disable" = "/admin/config/development/asset-injector/css/{asset_injector_css}/disable",
- *     "collection" = "/admin/structure/visibility_group"
+ *     "collection" = "/admin/structure/conditions_group"
  *   }
  * )
  */
 class AssetInjectorCss extends AssetInjectorBase {
-
-  /**
-   * Themes to apply.
-   *
-   * @var array
-   */
-  public $themes = [];
 
   /**
    * Media selector.

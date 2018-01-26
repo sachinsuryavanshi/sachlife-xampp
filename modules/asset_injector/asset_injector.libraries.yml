@@ -12,3 +12,11 @@ ace-editor:
       asset_injector.css: {}
   dependencies:
       - core/jquery.ui.resizable
+
+asset_injector:
+  version: VERSION
+  js:
+    js/asset_injector.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

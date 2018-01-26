@@ -11,9 +11,9 @@ INTRODUCTION
 ------------
 
 Better Login module is used to remove issue of styling Drupal
-login/password/registration forms. It is slightly inspired by the way Wordpress
-login forms work, and uses three page templates to change the style of the
-forms. It is very simple to use, just install the Better Login module and
+login/password/registration/reset forms. It is slightly inspired by the way
+Wordpress login forms work, and uses four page templates to change the style of
+the forms. It is very simple to use, just install the Better Login module and
 it starts working immediately.
 
  * For a full description of the module, visit the project page:

@@ -17,8 +17,18 @@ class AssetInjectorCssForm extends AssetInjectorFormBase {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\asset_injector\Entity\AssetInjectorCsss $entity */
+    /** @var \Drupal\asset_injector\Entity\AssetInjectorCss $entity */
     $entity = $this->entity;
+
+    // Advanced options fieldset.
+    $form['advanced'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Advanced options'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+      '#tree' => FALSE,
+    ];
+
     $form['advanced']['media'] = [
       '#type' => 'select',
       '#title' => 'Media',
@@ -30,6 +40,7 @@ class AssetInjectorCssForm extends AssetInjectorFormBase {
       ],
       '#default_value' => $entity->media,
     ];
+
     $form['advanced']['preprocess'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Preprocess CSS'),

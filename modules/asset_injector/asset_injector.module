@@ -51,9 +51,15 @@ function asset_injector_entity_type_build(array &$entity_types) {
  * Implements hook_css_alter().
  */
 function asset_injector_css_alter(array &$css, AttachedAssetsInterface $assets) {
-  foreach ($css as $key => &$item) {
-    if (strpos($key, 'asset_injector') !== FALSE) {
-      $item['group'] = 999;
+  $libraries = $assets->getLibraries();
+
+  foreach (asset_injector_library_info_build() as $lib_id => $library) {
+    if (in_array("asset_injector/$lib_id", $libraries) && !empty($library['css'])) {
+      foreach ($library['css'] as $group) {
+        foreach (array_keys($group) as $file) {
+          $css[trim($file, '/ ')]['group'] = 999;
+        }
+      }
     }
   }
 }
@@ -62,10 +68,8 @@ function asset_injector_css_alter(array &$css, AttachedAssetsInterface $assets) 
  * Implements hook_ckeditor_css_alter().
  */
 function asset_injector_ckeditor_css_alter(array &$css, Editor $editor) {
-  foreach (asset_injector_get_assets() as $asset) {
-    if ($asset->extension() == 'css' && $asset->isActive()) {
-      $css[] = $asset->internalFileUri();
-    }
+  foreach (asset_injector_get_assets(TRUE, ['asset_injector_css']) as $asset) {
+    $css[] = $asset->internalFileUri();
   }
 }
 
@@ -79,7 +83,9 @@ function asset_injector_ckeditor_css_alter(array &$css, Editor $editor) {
 function asset_injector_library_info_build() {
   $libraries = [];
   foreach (asset_injector_get_assets() as $asset) {
-    $libraries[$asset->libraryNameSuffix()] = $asset->libraryInfo();
+    if ($library_info = $asset->libraryInfo()) {
+      $libraries[$asset->libraryNameSuffix()] = $library_info;
+    }
   }
   \Drupal::moduleHandler()
     ->alter('asset_injector_library_info_build', $libraries);
@@ -109,29 +115,49 @@ function asset_injector_library_info_build() {
 function asset_injector_page_attachments(array &$attachments) {
   /** @var \Drupal\Core\Render\RendererInterface $renderer */
   $renderer = \Drupal::service('renderer');
-  foreach (asset_injector_get_assets() as $asset) {
-    if ($asset->isActive()) {
-      $attachments['#attached']['library'][] = 'asset_injector/' . $asset->libraryNameSuffix();
-      $renderer->addCacheableDependency($attachments, $asset);
-    }
+  /** @var \Drupal\Core\Asset\AttachedAssetsInterface $asset */
+  foreach (asset_injector_get_assets(TRUE) as $asset) {
+    $attachments['#attached']['library'][] = 'asset_injector/' . $asset->libraryNameSuffix();
+    $renderer->addCacheableDependency($attachments, $asset);
   }
 }
 
 /**
  * Get all available assets.
  *
+ * @param bool|null $active
+ *   Get only active (true), inactive (false), or all (null) assets.
+ * @param array $types
+ *   Array of entity type ids to limit the return.
+ *
  * @return \Drupal\asset_injector\AssetInjectorInterface[]
  *   Assets from css & js injectors.
  */
-function asset_injector_get_assets() {
+function asset_injector_get_assets($active = NULL, array $types = []) {
   /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
   $entity_type_manager = \Drupal::entityTypeManager();
   $assets = [];
-  foreach (asset_injector_get_entity_types() as $entity_type_id => $entity_type) {
+  foreach (asset_injector_get_entity_types($types) as $entity_type_id => $entity_type) {
     $entity_type_storage = $entity_type_manager->getStorage($entity_type_id);
     $asset_ids = $entity_type_storage->getQuery()->execute();
     foreach ($entity_type_storage->loadMultiple($asset_ids) as $asset) {
-      $assets[] = $asset;
+
+      // Get both active and not active assets.
+      if (is_null($active)) {
+        $assets[] = $asset;
+      }
+      else {
+        $access = $asset->access('view');
+
+        // Get only active assets.
+        if ($active && $access) {
+          $assets[] = $asset;
+        }
+        // Get only deactive assets.
+        elseif (!$active && !$access) {
+          $assets[] = $asset;
+        }
+      }
     }
   }
   return $assets;
@@ -140,21 +166,29 @@ function asset_injector_get_assets() {
 /**
  * Get asset entity types.
  *
+ * @param array $types
+ *   Basic array of entity type ids to limit the return of..
+ *
  * @return array
  *   Keyed array of entities defined as asset injector types.
  *
  * @see asset_injector_entity_type_build()
  */
-function asset_injector_get_entity_types() {
+function asset_injector_get_entity_types(array $types = []) {
   $asset_entity_types = &drupal_static(__FUNCTION__);
   if (!isset($asset_entity_types)) {
     $entity_types = \Drupal::entityTypeManager()->getDefinitions();
     $asset_entity_types = [];
     foreach ($entity_types as $entity_type_id => $entity_type) {
+
       if ($entity_type->get('asset_injector_entity_type')) {
         $asset_entity_types[$entity_type_id] = $entity_type;
       }
     }
+  }
+
+  if (!empty($types)) {
+    return array_intersect_key($asset_entity_types, array_flip($types));
   }
   return $asset_entity_types;
 }
@@ -166,4 +200,37 @@ function asset_injector_get_entity_types() {
  */
 function asset_injector_cache_flush() {
   AssetFileStorage::deleteAllFiles();
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Insert <noscript> code into page region.
+ */
+function asset_injector_preprocess_page(&$vars) {
+  foreach (asset_injector_get_assets(TRUE, ['asset_injector_js']) as $asset) {
+    if (empty($asset->noscript)) {
+      continue;
+    }
+
+    $active_theme = \Drupal::service('theme.manager')
+      ->getActiveTheme()
+      ->getName();
+
+    // Support legacy code where region was a string vs an array.
+    $no_script_regions = is_array($asset->noscriptRegion) ? $asset->noscriptRegion : [$active_theme => $asset->noscriptRegion];
+
+    if (!empty($no_script_regions[$active_theme])) {
+      $region = $no_script_regions[$active_theme];
+
+      $vars['page'][$region][$asset->id . '-noscript'] = [
+        '#type' => 'inline_template',
+        '#template' => '<noscript>{{ code | raw }}</noscript>',
+        '#context' => [
+          'code' => $asset->noscript,
+        ],
+      ];
+    }
+
+  }
 }

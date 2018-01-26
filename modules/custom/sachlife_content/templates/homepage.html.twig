@@ -5,13 +5,13 @@
       <h1 class="intro-title">{{ content.title }}</h1>
       <p class="intro-text hide-from-xs">{{ content.description|raw }}</p>
       <div class="intro-button-wrap">
-        <a href="{{ content.url}}"
+        <a href="{{ url('<front>') }}{{ content.url}}"
           class="btn btn-primary btn-rounded-5x margin-top-10 hide-from-xs">
             {{ content.urlText }}
         </a>
       </div>
     </div>
     <div class="made-with-love hide-from-sm">
-      <p>Made With <span class="text-red"><i class="fa fa-heart-o"></i></span></p>
+      <p>#sachlife <span class="text-red"><i class="fa fa-heart-o"></i></span></p>
   </div>
 </section>

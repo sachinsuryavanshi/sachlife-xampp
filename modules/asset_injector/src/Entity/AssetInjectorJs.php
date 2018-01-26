@@ -10,6 +10,7 @@ namespace Drupal\asset_injector\Entity;
  *   label = @Translation("Js Injector"),
  *   list_cache_tags = { "library_info" },
  *   handlers = {
+ *     "access" = "Drupal\asset_injector\AssetInjectorAccessControlHandler",
  *     "list_builder" = "Drupal\asset_injector\AssetInjectorListBuilder",
  *     "form" = {
  *       "add" = "Drupal\asset_injector\Form\AssetInjectorJsForm",
@@ -33,7 +34,7 @@ namespace Drupal\asset_injector\Entity;
  *     "delete-form" = "/admin/config/development/asset-injector/js/{asset_injector_js}/delete",
  *     "enable" = "/admin/config/development/asset-injector/js/{asset_injector_js}/enable",
  *     "disable" = "/admin/config/development/asset-injector/js/{asset_injector_js}/disable",
- *     "collection" = "/admin/structure/visibility_group"
+ *     "collection" = "/admin/structure/conditions_group"
  *   }
  * )
  */
@@ -59,6 +60,20 @@ class AssetInjectorJs extends AssetInjectorBase {
    * @var string
    */
   public $jquery = FALSE;
+
+  /**
+   * Code for <noscript> tag.
+   *
+   * @var string
+   */
+  public $noscript;
+
+  /**
+   * Region to insert <noscript> code into.
+   *
+   * @var array
+   */
+  public $noscriptRegion;
 
   /**
    * Gets the file extension of the asset.

@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @package Drupal\asset_injector\Form
  */
-class AssetInjectorDuplicateCssForm extends AssetInjectorCssForm {
+class AssetInjectorCssDuplicateForm extends AssetInjectorCssForm {
 
   /**
    * {@inheritdoc}

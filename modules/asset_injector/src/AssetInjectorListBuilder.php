@@ -2,6 +2,7 @@
 
 namespace Drupal\asset_injector;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
@@ -15,8 +16,7 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Injector');
-    $header['id'] = $this->t('Machine name');
-    $header['themes'] = $this->t('Themes');
+    $header['conditions'] = $this->t('Conditions');
     return $header + parent::buildHeader();
   }
 
@@ -25,14 +25,26 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $data['label'] = $entity->label();
-    $data['id'] = $entity->id();
-    $themes = $entity->themes;
-    if (empty($themes)) {
-      $data['themes'] = $this->t('All');
+
+    $data['conditions'] = [];
+
+    foreach ($entity->getConditionsCollection() as $condition_id => $condition) {
+      if ($condition_id == 'current_theme') {
+        $config = $condition->getConfiguration();
+        $condition->setConfiguration(['theme' => implode(', ', $config['theme'])] + $config);
+      }
+
+      /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $summary */
+      $summary = $condition->summary();
+      $data['conditions'][$condition_id] = Html::decodeEntities($summary->render());
     }
-    else {
-      $data['themes'] = implode(', ', $themes);
-    }
+
+    $data['conditions'] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => empty($data['conditions']) ? [$this->t('Global')] : $data['conditions'],
+    ];
+    $data['conditions'] = render($data['conditions']);
 
     $row = [
       'class' => $entity->status() ? 'enabled' : 'disabled',

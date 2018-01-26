@@ -2,19 +2,19 @@
 
 namespace Drupal\asset_injector\Entity;
 
-use Drupal;
 use Drupal\asset_injector\AssetInjectorInterface;
 use Drupal\asset_injector\AssetFileStorage;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+use Drupal\Core\Condition\ConditionPluginCollection;
 
 /**
  * Class AssetInjectorBase: Base asset injector class.
  *
  * @package Drupal\asset_injector\AssetInjectorBase.
  */
-abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInjectorInterface {
+abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInjectorInterface, EntityWithPluginCollectionInterface {
 
   /**
    * The Asset Injector ID.
@@ -41,6 +41,7 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
    * Themes to apply.
    *
    * @var array
+   * @deprecated
    */
   public $themes;
 
@@ -48,6 +49,7 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
    * Whitelist/blacklist pages.
    *
    * @var bool
+   * @deprecated
    */
   public $visibility;
 
@@ -55,6 +57,7 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
    * Pages to whitelist/blacklist.
    *
    * @var string
+   * @deprecated
    */
   public $pages;
 
@@ -62,50 +65,53 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
    * Node type to apply asset.
    *
    * @var string
+   * @deprecated
    */
   public $nodeType;
 
   /**
+   * Require all conditions.
+   *
+   * @var bool
+   */
+  public $conditions_require_all = TRUE;
+
+  /**
+   * The conditions settings for this asset.
+   *
+   * @var array
+   */
+  protected $conditions = [];
+
+  /**
+   * The available contexts for this asset and its conditions conditions.
+   *
+   * @var array
+   */
+  protected $contexts = [];
+
+  /**
+   * The conditions collection.
+   *
+   * @var \Drupal\Core\Condition\ConditionPluginCollection
+   */
+  protected $conditionsCollection;
+
+  /**
+   * The condition plugin manager.
+   *
+   * @var \Drupal\Core\Executable\ExecutableManagerInterface
+   */
+  protected $conditionPluginManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function isActive() {
-    if (!$this->status()) {
-      return FALSE;
+  public function __construct(array $values, $entity_type) {
+    parent::__construct($values, $entity_type);
+    if (empty($this->conditions)) {
+      $this->convertConditionProperties();
     }
-
-    $theme = Drupal::theme()->getActiveTheme()->getName();
-
-    if (empty($this->themes) || in_array($theme, $this->themes)) {
-      if (!empty($this->nodeType)) {
-        $node = Drupal::routeMatch()->getParameter('node');
-        if (is_object($node) && $node->getType() == $this->nodeType) {
-          return TRUE;
-        }
-        else {
-          return FALSE;
-        }
-      }
-
-      $pages = rtrim($this->pages);
-      if (empty($pages)) {
-        return TRUE;
-      }
-
-      $path = Drupal::service('path.current')->getPath();
-      $path_alias = Unicode::strtolower(Drupal::service('path.alias_manager')
-        ->getAliasByPath($path));
-      $page_match = Drupal::service('path.matcher')
-        ->matchPath($path_alias, $pages) || (($path != $path_alias) && Drupal::service('path.matcher')
-          ->matchPath($path, $pages));
-
-      // When $rule->visibility has a value of 0, the asset is
-      // added on all pages except those listed in $rule->pages.
-      // When set to 1, it is added only on those pages listed in $rule->pages.
-      if (!($this->visibility xor $page_match)) {
-        return TRUE;
-      }
-    }
-    return FALSE;
   }
 
   /**
@@ -177,6 +183,112 @@ abstract class AssetInjectorBase extends ConfigEntityBase implements AssetInject
       }
     }
     parent::preSave($storage);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPluginCollections() {
+    return ['conditions' => $this->getConditionsCollection()];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConditions() {
+    return $this->getConditionsCollection()->getConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConditionsConfig($instance_id, array $configuration) {
+    $conditions = $this->getConditionsCollection();
+    if (!$conditions->has($instance_id)) {
+      $configuration['id'] = $instance_id;
+      $conditions->addInstanceId($instance_id, $configuration);
+    }
+    else {
+      $conditions->setInstanceConfiguration($instance_id, $configuration);
+    }
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConditionsCollection() {
+    if (!isset($this->conditionsCollection)) {
+      $this->conditionsCollection = new ConditionPluginCollection($this->conditionPluginManager(), $this->get('conditions'));
+    }
+    return $this->conditionsCollection;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConditionsCollection(ConditionPluginCollection $conditions) {
+    $this->conditionsCollection = $conditions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConditionsInstance($instance_id) {
+    return $this->getConditionsCollection()->get($instance_id);
+  }
+
+  /**
+   * Gets the condition plugin manager.
+   *
+   * @return \Drupal\Core\Executable\ExecutableManagerInterface
+   *   The condition plugin manager.
+   */
+  protected function conditionPluginManager() {
+    if (!isset($this->conditionPluginManager)) {
+      $this->conditionPluginManager = \Drupal::service('plugin.manager.condition');
+    }
+    return $this->conditionPluginManager;
+  }
+
+  /**
+   * Convert legacy code from object properties to condition plugins.
+   */
+  public function convertConditionProperties() {
+    $conditions = [];
+
+    if (!empty($this->pages)) {
+      $conditions['request_path'] = [
+        'id' => 'request_path',
+        'pages' => $this->pages,
+        'negate' => !$this->visibility,
+      ];
+    }
+
+    if (!empty($this->nodeType)) {
+      $conditions['node_type'] = [
+        'id' => 'node_type',
+        'bundles' => is_array($this->nodeType) ? $this->nodeType : [$this->nodeType => $this->nodeType],
+        'negate' => FALSE,
+        'context_mapping' => ['node' => '@node.node_route_context:node'],
+      ];
+    }
+
+    if (!empty($this->themes)) {
+      $conditions['current_theme'] = [
+        'id' => 'current_theme',
+        'theme' => $this->themes,
+        'negate' => FALSE,
+      ];
+    }
+
+    // Since injectors since 2.0 will not have the themes, nodeType, etc
+    // properties, its safe to overwrite the existing conditions since they
+    // would be an empty array until this point.
+    if ($conditions) {
+      $this->conditions_require_all = TRUE;
+      $this->set('conditions', $conditions);
+    }
   }
 
 }
