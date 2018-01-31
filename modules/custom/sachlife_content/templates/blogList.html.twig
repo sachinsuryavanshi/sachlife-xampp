@@ -3,21 +3,20 @@
     {% for key,value in content %}
       <div class="blog-list-items-wrap">
         <div class="blog-list-item">
-          <a href="blog-single-sidebar-right.html" class="bli-image bg-image"
+          <a href="{{ url('<front>') }}article/{{ key }}/{{ value.title|replace({' ':'-'}) }}" class="bli-image bg-image"
              style="background-image: url({{ file_url(value.headerImage) }}); background-position: 50% 27%;">
           </a>
           <div class="bli-info">
             <h2 class="bli-title">
-              <a href="blog-single-sidebar-right.html" title="{{ value.title }}">
+              <a href="{{ url('<front>') }}article/{{ key }}/{{ value.title|replace({' ':'-'}) }}" title="{{ value.title }}">
                 {{ value.title }}
               </a>
             </h2>
             <div class="bli-meta">
               <a href="" class="article-time">{{ value.created|date('d M Y') }}</a> - by:
-              <a href="" class="article-author">{{ value.author }}</a> - in
-              <a href="" class="article-category">#black &amp; white</a>
+              <a href="" class="article-author">{{ value.author }}</a>
             </div>
-            <p class="bli-desc">{{ value.description|slice(0, 300)|raw ~ '......' }}</p>
+            <p class="bli-desc">{{ value.description|slice(0, 300)|raw}}......</p>
             <div class="bli-button">
               <a href="{{ url('<front>') }}article/{{ key }}/{{ value.title|replace({' ':'-'}) }}"
                  class="btn btn-dark btn-rounded-5x btn-sm">Read More</a>

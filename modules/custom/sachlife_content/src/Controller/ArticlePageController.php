@@ -28,7 +28,7 @@ class ArticlePageController extends ControllerBase {
     $query->addField('nbh', 'field_blog_header_image_target_id');
     $query->condition('type', 'blogs');
     $query->orderBy('created', 'DESC');
-    $query->range(0, 5);
+    $query->range(0, 15);
     $content = $query->execute()->fetchAllAssoc('nid');
 
     $contentData = [];
@@ -38,8 +38,10 @@ class ArticlePageController extends ControllerBase {
         $contentData[$key]['title'] = $value->title;
         $contentData[$key]['description'] = $value->body_value;
         $contentData[$key]['created'] = $value->created;
-        $contentData[$key]['headerImage'] = File::load($value->field_blog_header_image_target_id)
-          ->getFileUri();
+        if($value->field_blog_header_image_target_id) {
+          $contentData[$key]['headerImage'] = File::load($value->field_blog_header_image_target_id)
+            ->getFileUri();
+        }
       }
     }
 

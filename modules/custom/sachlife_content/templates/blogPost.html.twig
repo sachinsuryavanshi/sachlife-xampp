@@ -23,7 +23,7 @@
           {% if key1.paragraph|length > 0 %}
             {% for key2 in key1.paragraph %}
               {{ key2.blogDescription|raw }}
-              <a href="" class="lg-trigger" data-exthumbnail="">
+              <a href="{{ file_url(key2.blogImage) }}" class="lg-trigger" data-exthumbnail="{{ file_url(key2.blogImage) }}">
                 <img src="{{ file_url(key2.blogImage) }}" alt="image">
               </a>
             {% endfor %}
@@ -37,7 +37,7 @@
                   <li><span><i class="fa fa-tags"></i> tags:</span></li>
                   {% if key1.term|length > 0 %}
                     {% for key3,value3 in key1.term %}
-                      <li><a href="{{ key3 }}">#{{ value3 }}</a></li>
+                      <li><a href="#">#{{ value3 }}</a></li>
                     {% endfor %}
                   {% endif %}
                 </ul>

@@ -16,7 +16,7 @@
                     </div>
                     <h2 class="filter-heading">Filters</h2>
                     <div class="isotope-filter-links collapse navbar-collapse no-padding" id="isotope-filter-collapse">
-                      {% if categoryList|length > 0 %}s
+                      {% if categoryList|length > 0 %}
                         <a class="active" href="#" data-filter="*">all</a>
                         {% for keyList in categoryList %}
                           <a href="#" data-filter=".{{ keyList|replace(' ', '-')|lower }}">{{ keyList }}</a>

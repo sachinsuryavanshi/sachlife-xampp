@@ -147,9 +147,9 @@ class SachlifePortfolioPageController extends ControllerBase {
     $content['nodePrevNavigation'] = $this->nodePrevNavigation($nid);
     $content['nodeNextNavigation'] = $this->nodeNextNavigation($nid);
 
-    //echo '<pre>';
-    //print_r($content);
-    //exit;
+    /*echo '<pre>';
+    print_r($content);
+    exit;*/
 
     $build = [];
     $build['portfolioPage'] = [
