@@ -35,9 +35,9 @@ function asset_injector_uninstall() {
  * Change the entities from css_injector to asset_injector_css.
  */
 function asset_injector_update_8200() {
-  $query = "UPDATE config SET name = REPLACE(name, 'asset_injector.css_injector', 'asset_injector.asset_injector_css') WHERE name LIKE 'asset_injector.css_injector%'";
+  $query = "UPDATE {config} SET name = REPLACE(name, 'asset_injector.css_injector', 'asset_injector.asset_injector_css') WHERE name LIKE 'asset_injector.css_injector%'";
   \Drupal::database()->query($query);
-  $query = "UPDATE config SET name = REPLACE(name, 'asset_injector.js_injector', 'asset_injector.asset_injector_js') WHERE name LIKE 'asset_injector.js_injector%'";
+  $query = "UPDATE {config} SET name = REPLACE(name, 'asset_injector.js_injector', 'asset_injector.asset_injector_js') WHERE name LIKE 'asset_injector.js_injector%'";
   \Drupal::database()->query($query);
 }
 
@@ -45,8 +45,8 @@ function asset_injector_update_8200() {
  * Config objects from asset_injector.asset_injector_css to asset_injector.css.
  */
 function asset_injector_update_8201() {
-  $query = "UPDATE config SET name = REPLACE(name, 'asset_injector.asset_injector_css', 'asset_injector.css') WHERE name LIKE 'asset_injector.asset_injector_css%'";
+  $query = "UPDATE {config} SET name = REPLACE(name, 'asset_injector.asset_injector_css', 'asset_injector.css') WHERE name LIKE 'asset_injector.asset_injector_css%'";
   \Drupal::database()->query($query);
-  $query = "UPDATE config SET name = REPLACE(name, 'asset_injector.asset_injector_js', 'asset_injector.js') WHERE name LIKE 'asset_injector.asset_injector_js%'";
+  $query = "UPDATE {config} SET name = REPLACE(name, 'asset_injector.asset_injector_js', 'asset_injector.js') WHERE name LIKE 'asset_injector.asset_injector_js%'";
   \Drupal::database()->query($query);
 }

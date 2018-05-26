@@ -5,8 +5,8 @@ description: Adds CSS or JS to the page output based on configurable rules.
 package: Development
 configure: asset_injector.development
 
-# Information added by Drupal.org packaging script on 2017-12-10
-version: '8.x-2.1'
+# Information added by Drupal.org packaging script on 2018-04-09
+version: '8.x-2.2'
 core: '8.x'
 project: 'asset_injector'
-datestamp: 1512866587
+datestamp: 1523307487

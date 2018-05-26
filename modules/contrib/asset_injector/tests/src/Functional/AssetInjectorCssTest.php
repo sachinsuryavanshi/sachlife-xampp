@@ -8,6 +8,8 @@ use Drupal\Tests\BrowserTestBase;
  * Class AssetInjectorCssTest.
  *
  * @package Drupal\Tests\asset_injector\Functional
+ *
+ * @group asset_injector
  */
 class AssetInjectorCssTest extends BrowserTestBase {
 
@@ -65,11 +67,7 @@ class AssetInjectorCssTest extends BrowserTestBase {
       'code' => '.block {border:1px solid black;}',
     ], t('Save'));
 
-    $html = $this->getSession()->getPage()->getOuterHtml();
-    if (strpos($html, 'asset_injector/css/blocks') === FALSE) {
-      throw new \Exception(t('Css not applied to page.'));
-    }
-
+    $this->getSession()->getPage()->hasContent('asset_injector/css/blocks');
     /** @var \Drupal\asset_injector\Entity\AssetInjectorCss $asset */
     foreach (asset_injector_get_assets(NULL, ['asset_injector_css']) as $asset) {
       $path = parse_url(file_create_url($asset->internalFileUri()), PHP_URL_PATH);

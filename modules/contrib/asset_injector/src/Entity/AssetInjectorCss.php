@@ -30,7 +30,7 @@ namespace Drupal\asset_injector\Entity;
  *   },
  *   links = {
  *     "canonical" = "/admin/config/development/asset-injector/css/{asset_injector_css}",
- *     "edit-form" = "/admin/config/development/asset-injector/css/{asset_injector_css}/edit",
+ *     "edit-form" = "/admin/config/development/asset-injector/css/{asset_injector_css}",
  *     "delete-form" = "/admin/config/development/asset-injector/css/{asset_injector_css}/delete",
  *     "enable" = "/admin/config/development/asset-injector/css/{asset_injector_css}/enable",
  *     "disable" = "/admin/config/development/asset-injector/css/{asset_injector_css}/disable",

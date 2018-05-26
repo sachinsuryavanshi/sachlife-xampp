@@ -4,8 +4,7 @@ asset_injector.development:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Asset Injector'
   requirements:
-    _permission: 'administer css assets injector'
-    _permission: 'administer js assets injector'
+    _permission: 'administer css assets injector+administer js assets injector'
 
 # AssetInjectorCsss routing definition
 entity.asset_injector_css.collection:
@@ -25,6 +24,14 @@ entity.asset_injector_css.add_form:
     _permission: 'administer css assets injector'
 
 entity.asset_injector_css.edit_form:
+  path: '/admin/config/development/asset-injector/css/{asset_injector_css}'
+  defaults:
+    _entity_form: 'asset_injector_css.edit'
+    _title: 'Edit Css Injector'
+  requirements:
+    _permission: 'administer css assets injector'
+
+entity.asset_injector_css.canonical:
   path: '/admin/config/development/asset-injector/css/{asset_injector_css}'
   defaults:
     _entity_form: 'asset_injector_css.edit'
@@ -83,6 +90,14 @@ entity.asset_injector_js.add_form:
     _permission: 'administer js assets injector'
 
 entity.asset_injector_js.edit_form:
+  path: '/admin/config/development/asset-injector/js/{asset_injector_js}'
+  defaults:
+    _entity_form: 'asset_injector_js.edit'
+    _title: 'Edit Js Injector'
+  requirements:
+    _permission: 'administer js assets injector'
+
+entity.asset_injector_js.canonical:
   path: '/admin/config/development/asset-injector/js/{asset_injector_js}'
   defaults:
     _entity_form: 'asset_injector_js.edit'

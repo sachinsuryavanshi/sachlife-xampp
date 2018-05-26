@@ -6,10 +6,10 @@ ace-editor:
     url: https://ace.c9.io
   js:
     //cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js: { type: external, minified: true }
-    asset_injector.js: {}
+    js/asset_injector.ace_editor.js: {}
   css:
     base:
-      asset_injector.css: {}
+      css/asset_injector.css: {}
   dependencies:
       - core/jquery.ui.resizable
 

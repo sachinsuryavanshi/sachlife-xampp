@@ -1,0 +1,31 @@
+#auth_box {
+    width: 40%;
+    margin: 0 auto;
+    padding: 50px 0 0;
+    font-family: sans-serif;
+}
+
+#auth_box input[type="text"], #auth_box input[type="password"] {
+    width: 70%;
+    border: 1px #ccc solid;
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 15px;
+    margin: 5px;
+}
+
+input#edit-submit {
+    color: white;
+    background-color: #204d74;
+    border-color: #122b40;
+    padding: 5px;
+    width: 30%;
+}
+
+label.js-form-required.form-required {
+    margin-bottom: 30px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    /* clear: none; */
+}

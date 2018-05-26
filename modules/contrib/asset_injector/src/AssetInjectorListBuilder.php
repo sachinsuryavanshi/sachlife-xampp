@@ -28,15 +28,18 @@ class AssetInjectorListBuilder extends ConfigEntityListBuilder {
 
     $data['conditions'] = [];
 
+    /** @var \Drupal\Core\Condition\ConditionPluginBase $condition */
     foreach ($entity->getConditionsCollection() as $condition_id => $condition) {
       if ($condition_id == 'current_theme') {
         $config = $condition->getConfiguration();
         $condition->setConfiguration(['theme' => implode(', ', $config['theme'])] + $config);
       }
 
+      $data['conditions'][$condition_id] = $this->t('%plugin is configured.', ['%plugin' => $condition->getPluginDefinition()['label']]);
       /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $summary */
-      $summary = $condition->summary();
-      $data['conditions'][$condition_id] = Html::decodeEntities($summary->render());
+      if ($summary = $condition->summary()) {
+        $data['conditions'][$condition_id] = Html::decodeEntities($summary->render());
+      }
     }
 
     $data['conditions'] = [

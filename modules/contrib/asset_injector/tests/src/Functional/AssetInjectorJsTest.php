@@ -8,6 +8,8 @@ use Drupal\Tests\BrowserTestBase;
  * Class AssetInjectorJsTest.
  *
  * @package Drupal\Tests\asset_injector\Functional
+ *
+ * @group asset_injector
  */
 class AssetInjectorJsTest extends BrowserTestBase {
 
@@ -70,10 +72,7 @@ class AssetInjectorJsTest extends BrowserTestBase {
       'code' => '.block {border:1px solid black;}',
     ], t('Save'));
 
-    $html = $this->getSession()->getPage()->getHtml();
-    if (strpos($html, 'asset_injector/js/blocks') === FALSE) {
-      throw new \Exception(t('Js not applied to page.'));
-    }
+    $this->getSession()->getPage()->hasContent('asset_injector/js/blocks');
 
     /** @var \Drupal\asset_injector\Entity\AssetInjectorJs $asset */
     foreach (asset_injector_get_assets(NULL, ['asset_injector_js']) as $asset) {
